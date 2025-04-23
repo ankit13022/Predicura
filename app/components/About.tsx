@@ -16,7 +16,7 @@ const About = () => {
           The core of this application is a machine learning model trained on
           real-world medical data. By inputting values such as glucose levels,
           blood pressure, BMI, insulin levels, and other health indicators, the
-          app quickly analyzes the data and provides an instant prediction. It's
+          app quickly analyzes the data and provides an instant prediction. Its
           designed not as a replacement for professional diagnosis, but as a
           tool to increase awareness and encourage users to consult healthcare
           professionals if needed.
@@ -25,7 +25,7 @@ const About = () => {
           This project was created to showcase how machine learning can be
           integrated into web development, and how technology can support
           personal health monitoring in a privacy-focused and intuitive way.
-          Whether you're a developer exploring ML or someone interested in
+          Whether you are a developer exploring ML or someone interested in
           learning more about your health, this app is built with you in mind.
         </p>
       </div>
