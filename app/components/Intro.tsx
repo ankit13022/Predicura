@@ -15,7 +15,7 @@ const Intro = () => {
             the likelihood of diabetes. Fast, easy, and secure.
           </p>
           <Link
-            href="/predict"
+            href="#predict"
             className="inline-block bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700 transition"
           >
             Get Started

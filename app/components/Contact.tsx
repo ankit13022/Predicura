@@ -17,10 +17,15 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert("Thank you for reaching out! Your message has been submitted.");
+    setForm({
+      name: "",
+      email: "",
+      message: "",
+    });
   };
 
   return (
-    <section className="bg-gray-50 py-16 px-6">
+    <section id="contact" className="bg-gray-50 py-16 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Title Section */}
         <h2 className="text-3xl font-semibold text-blue-700 text-center mb-8">

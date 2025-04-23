@@ -25,10 +25,10 @@ const Navbar = () => {
           <Link href="/" className="hover:text-gray-300">
             Home
           </Link>
-          <Link href="/about" className="hover:text-gray-300">
+          <Link href="#about" className="hover:text-gray-300">
             About
           </Link>
-          <Link href="/contact" className="hover:text-gray-300">
+          <Link href="#contact" className="hover:text-gray-300">
             Contact
           </Link>
         </div>
@@ -39,10 +39,10 @@ const Navbar = () => {
           <Link href="/" className="block hover:text-gray-300">
             Home
           </Link>
-          <Link href="/about" className="block hover:text-gray-300">
+          <Link href="#about" className="block hover:text-gray-300">
             About
           </Link>
-          <Link href="/contact" className="block hover:text-gray-300">
+          <Link href="#contact" className="block hover:text-gray-300">
             Contact
           </Link>
         </div>
