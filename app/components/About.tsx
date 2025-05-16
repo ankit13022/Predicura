@@ -33,7 +33,7 @@ const About = () => {
           We understand that health can be a sensitive topic, and that not
           everyone is comfortable navigating complex medical forms or reading
           through long articles. Thats why the design of this platform is clean,
-          straightforward, and approachable. Whether you're a young adult trying
+          straightforward, and approachable. Whether youre a young adult trying
           to stay ahead of your health or someone older who just wants peace of
           mind, the process is quick, private, and easy to understand.
         </p>
@@ -42,7 +42,7 @@ const About = () => {
           technology not just for convenience, but for care. It represents a
           step toward a future where people can better understand their own
           bodies and make informed decisions, right from their phones or
-          computers. Whether you're here out of curiosity or concern, this tool
+          computers. Whether youre here out of curiosity or concern, this tool
           is made for you — with the goal of helping you feel more informed,
           more prepared, and more in control of your health journey.
         </p>
