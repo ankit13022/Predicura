@@ -40,8 +40,8 @@ export default function DiabetesPredictionForm() {
   };
 
   const dietCharts = {
-    low: "/diet-charts/good-diabetes-health.pdf",
-    high: "/diet-charts/high-risk-diabetes-diet.pdf",
+    low: "/good-diabetes-health.pdf",
+    high: "/high-risk-diabetes-diet.pdf",
   };
 
   return (
@@ -104,7 +104,7 @@ export default function DiabetesPredictionForm() {
           {riskLevel === "low" && (
             <a
               href={dietCharts.low}
-              download
+              download="good-diabetes-health.pdf"
               className="inline-block mt-6 px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow transition duration-300"
             >
               Download Healthy Diabetes Diet Chart
@@ -115,7 +115,7 @@ export default function DiabetesPredictionForm() {
             <>
               <a
                 href={dietCharts.high}
-                download
+                download="high-risk-diabetes-diet.pdf"
                 className="inline-block mt-6 px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow transition duration-300"
               >
                 Download Diabetes Control Diet Chart

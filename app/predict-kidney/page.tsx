@@ -65,9 +65,9 @@ export default function KidneyPredictionForm() {
 
   // Diet chart links (store these files in public/diet-charts/)
   const dietCharts = {
-    low: "/diet-charts/good-kidney-health.pdf",
-    moderate: "/diet-charts/moderate-risk-kidney-diet.pdf",
-    high: "/diet-charts/high-risk-kidney-diet.pdf",
+    low: "/good-kidney-health.pdf",
+    moderate: "/moderate-risk-kidney-diet.pdf",
+    high: "/high-risk-kidney-diet.pdf",
   };
 
   return (
@@ -190,7 +190,7 @@ export default function KidneyPredictionForm() {
           {riskLevel === "low" && (
             <a
               href={dietCharts.low}
-              download
+              download="good-kidney-health.pdf"
               className="inline-block mt-4 px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition"
             >
               Download Healthy Kidney Diet Chart
@@ -199,7 +199,7 @@ export default function KidneyPredictionForm() {
           {riskLevel === "moderate" && (
             <a
               href={dietCharts.moderate}
-              download
+              download="moderate-risk-kidney-diet.pdf"
               className="inline-block mt-4 px-6 py-3 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition"
             >
               Download Moderate Risk Kidney Diet Chart
@@ -209,7 +209,7 @@ export default function KidneyPredictionForm() {
             <>
               <a
                 href={dietCharts.high}
-                download
+                download="high-risk-kidney-diet.pdf"
                 className="inline-block mt-4 px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition"
               >
                 Download Kidney Disease Control Diet Chart
