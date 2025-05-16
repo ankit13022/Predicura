@@ -15,9 +15,9 @@ const About = () => {
         <p className="text-lg text-gray-700 mb-6 leading-relaxed">
           Health awareness is one of the most important parts of disease
           prevention. Unfortunately, many people live with conditions like
-          diabetes or kidney issues without knowing it, simply because they
-          don’t have easy access to tools or the knowledge to understand early
-          signs. That’s where this platform comes in. It offers a user-friendly
+          diabetes or kidney issues without knowing it, simply because they dont
+          have easy access to tools or the knowledge to understand early signs.
+          Thats where this platform comes in. It offers a user-friendly
           experience where anyone can enter a few basic health details and
           receive a preliminary risk assessment — instantly and privately.
         </p>
@@ -32,10 +32,10 @@ const About = () => {
         <p className="text-lg text-gray-700 mb-6 leading-relaxed">
           We understand that health can be a sensitive topic, and that not
           everyone is comfortable navigating complex medical forms or reading
-          through long articles. That’s why the design of this platform is
-          clean, straightforward, and approachable. Whether you're a young adult
-          trying to stay ahead of your health or someone older who just wants
-          peace of mind, the process is quick, private, and easy to understand.
+          through long articles. Thats why the design of this platform is clean,
+          straightforward, and approachable. Whether you're a young adult trying
+          to stay ahead of your health or someone older who just wants peace of
+          mind, the process is quick, private, and easy to understand.
         </p>
         <p className="text-lg text-gray-700 leading-relaxed">
           Ultimately, this project is a reflection of a growing movement: using

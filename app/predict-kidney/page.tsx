@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function KidneyPredictionForm() {
   const [form, setForm] = useState({
@@ -29,21 +30,18 @@ export default function KidneyPredictionForm() {
     ""
   );
 
-  // Update form inputs
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Dummy risk calculation based on some fields (replace with your real logic)
   const calculateRisk = () => {
     const bp = Number(form.bloodPressure);
     const glucose = Number(form.bloodGlucose);
     const creatinine = Number(form.serumCreatinine);
     const anemia = form.anemia.toLowerCase();
 
-    // Simple logic for demo purposes:
     if (bp > 140 || glucose > 140 || creatinine > 1.3 || anemia === "yes") {
       return "High risk of Kidney Disease detected.";
     } else if (bp > 120 || glucose > 120 || creatinine > 1.1) {
@@ -63,7 +61,6 @@ export default function KidneyPredictionForm() {
     else setRiskLevel("low");
   };
 
-  // Diet chart links (store these files in public/diet-charts/)
   const dietCharts = {
     low: "/good-kidney-health.pdf",
     moderate: "/moderate-risk-kidney-diet.pdf",
@@ -79,7 +76,6 @@ export default function KidneyPredictionForm() {
         onSubmit={handleSubmit}
         className="w-full max-w-3xl bg-white p-8 rounded-lg shadow-md space-y-6"
       >
-        {/* Example required inputs */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InputField
             label="Blood Pressure (mm Hg) *"
@@ -163,7 +159,6 @@ export default function KidneyPredictionForm() {
             type="text"
             placeholder="Yes or No"
           />
-          {/* Add more fields as needed */}
         </div>
         <button
           type="submit"
@@ -173,7 +168,6 @@ export default function KidneyPredictionForm() {
         </button>
       </form>
 
-      {/* Result Section */}
       {result && (
         <div
           className={`mt-8 p-6 rounded-lg max-w-3xl w-full text-center font-semibold ${
@@ -186,46 +180,48 @@ export default function KidneyPredictionForm() {
         >
           <p className="text-xl">{result}</p>
 
-          {/* Download / Suggestion */}
           {riskLevel === "low" && (
-            <a
+            <Link
               href={dietCharts.low}
-              download="good-kidney-health.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block mt-4 px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition"
             >
-              Download Healthy Kidney Diet Chart
-            </a>
+              Healthy Kidney Diet Chart
+            </Link>
           )}
+
           {riskLevel === "moderate" && (
-            <a
+            <Link
               href={dietCharts.moderate}
-              download="moderate-risk-kidney-diet.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block mt-4 px-6 py-3 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition"
             >
-              Download Moderate Risk Kidney Diet Chart
-            </a>
+              Moderate Risk Kidney Diet Chart
+            </Link>
           )}
+
           {riskLevel === "high" && (
             <>
-              <a
+              <Link
                 href={dietCharts.high}
-                download="high-risk-kidney-diet.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block mt-4 px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition"
               >
-                Download Kidney Disease Control Diet Chart
-              </a>
+                Kidney Disease Control Diet Chart
+              </Link>
               <p className="mt-4 font-semibold text-red-800">
                 We strongly recommend consulting a healthcare professional for
                 further evaluation.
               </p>
-              <a
+              <Link
                 href="/"
-                target=""
-                rel="noopener noreferrer"
                 className="mt-2 inline-block text-blue-700 underline"
               >
-                Consult to Doctor or Speselist
-              </a>
+                Consult to Doctor or Specialist
+              </Link>
             </>
           )}
         </div>
@@ -234,7 +230,7 @@ export default function KidneyPredictionForm() {
   );
 }
 
-// InputField Component for reuse
+// Reusable InputField component
 function InputField({
   label,
   name,

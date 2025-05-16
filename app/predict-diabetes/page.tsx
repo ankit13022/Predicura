@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function DiabetesPredictionForm() {
   const [form, setForm] = useState({
@@ -102,36 +103,36 @@ export default function DiabetesPredictionForm() {
           <p>Prediction Result: {result}</p>
 
           {riskLevel === "low" && (
-            <a
+            <Link
               href={dietCharts.low}
-              download="good-diabetes-health.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block mt-6 px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow transition duration-300"
             >
               Download Healthy Diabetes Diet Chart
-            </a>
+            </Link>
           )}
 
           {riskLevel === "high" && (
             <>
-              <a
+              <Link
                 href={dietCharts.high}
-                download="high-risk-diabetes-diet.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block mt-6 px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow transition duration-300"
               >
                 Download Diabetes Control Diet Chart
-              </a>
+              </Link>
               <p className="mt-6 font-semibold text-red-900">
                 We strongly recommend consulting a healthcare professional for
                 further evaluation.
               </p>
-              <a
+              <Link
                 href="/"
-                target="_blank"
-                rel="noopener noreferrer"
                 className="mt-3 inline-block text-blue-700 underline font-medium hover:text-blue-900 transition duration-300"
               >
-                Consult to Doctor or Speselist
-              </a>
+                Consult to Doctor or Specialist
+              </Link>
             </>
           )}
         </div>
