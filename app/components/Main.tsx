@@ -40,10 +40,7 @@ export default function Main() {
   };
 
   return (
-    <main
-      id="predict"
-      className="flex flex-col items-center justify-center min-h-screen p-4 bg-white"
-    >
+    <main className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
       <h1 className="text-3xl font-bold text-blue-700 mb-6">
         Diabetes Prediction Form
       </h1>

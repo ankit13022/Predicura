@@ -6,27 +6,45 @@ const About = () => {
           About This Project
         </h2>
         <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          The Diabetes Predictor is an AI-powered web application that allows
-          users to assess their risk of developing diabetes based on a variety
-          of health-related inputs. Built using modern web technologies like
-          Next.js and TailwindCSS, this project aims to make predictive health
-          tools more accessible and user-friendly.
+          This project is designed with a single purpose in mind: to empower
+          individuals to take proactive steps in understanding their health.
+          With a focus on two significant health concerns — diabetes and kidney
+          disease — this web-based tool provides a simple and accessible way to
+          assess potential risks based on a few key health indicators.
         </p>
         <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          The core of this application is a machine learning model trained on
-          real-world medical data. By inputting values such as glucose levels,
-          blood pressure, BMI, insulin levels, and other health indicators, the
-          app quickly analyzes the data and provides an instant prediction. Its
-          designed not as a replacement for professional diagnosis, but as a
-          tool to increase awareness and encourage users to consult healthcare
-          professionals if needed.
+          Health awareness is one of the most important parts of disease
+          prevention. Unfortunately, many people live with conditions like
+          diabetes or kidney issues without knowing it, simply because they
+          don’t have easy access to tools or the knowledge to understand early
+          signs. That’s where this platform comes in. It offers a user-friendly
+          experience where anyone can enter a few basic health details and
+          receive a preliminary risk assessment — instantly and privately.
+        </p>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          The idea behind this project is not to diagnose or replace medical
+          professionals. Rather, it serves as a supportive guide, helping users
+          identify whether they might be at risk and should consider speaking
+          with a healthcare provider. Sometimes, a simple tool like this can be
+          the nudge someone needs to take their health seriously or catch a
+          potential issue early.
+        </p>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          We understand that health can be a sensitive topic, and that not
+          everyone is comfortable navigating complex medical forms or reading
+          through long articles. That’s why the design of this platform is
+          clean, straightforward, and approachable. Whether you're a young adult
+          trying to stay ahead of your health or someone older who just wants
+          peace of mind, the process is quick, private, and easy to understand.
         </p>
         <p className="text-lg text-gray-700 leading-relaxed">
-          This project was created to showcase how machine learning can be
-          integrated into web development, and how technology can support
-          personal health monitoring in a privacy-focused and intuitive way.
-          Whether you are a developer exploring ML or someone interested in
-          learning more about your health, this app is built with you in mind.
+          Ultimately, this project is a reflection of a growing movement: using
+          technology not just for convenience, but for care. It represents a
+          step toward a future where people can better understand their own
+          bodies and make informed decisions, right from their phones or
+          computers. Whether you're here out of curiosity or concern, this tool
+          is made for you — with the goal of helping you feel more informed,
+          more prepared, and more in control of your health journey.
         </p>
       </div>
     </section>

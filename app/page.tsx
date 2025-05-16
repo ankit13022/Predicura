@@ -1,20 +1,19 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-import Main from "./components/Main";
+// import Navbar from "./components/Navbar";
+// import Main from "./components/Main";
 import Intro from "./components/Intro";
 import About from "./components/About";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 import Contact from "./components/Contact";
+import PredictionSelect from "./components/PredictionSelect";
 
 const page = () => {
   return (
     <>
-      <Navbar />
       <Intro />
       <About />
-      <Main />
+      <PredictionSelect />
       <Contact />
-      <Footer />
     </>
   );
 };
