@@ -2,8 +2,22 @@
 import { useState } from "react";
 import Link from "next/link";
 
+type FormData = {
+  specificGravity: string;
+  albumin: string;
+  hemoglobin: string;
+  redBloodCellCount: string;
+  hypertension: string;
+  diabetesMellitus: string;
+  appetite: string;
+  pedalEdema: string;
+};
+
+type RiskLevel = "low" | "high";
+type DietCharts = Record<RiskLevel, string>;
+
 export default function KidneyPredictionForm() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormData>({
     specificGravity: "",
     albumin: "",
     hemoglobin: "",
@@ -15,7 +29,7 @@ export default function KidneyPredictionForm() {
   });
 
   const [result, setResult] = useState("");
-  const [riskLevel, setRiskLevel] = useState<"low" | "high" | "">("");
+  const [riskLevel, setRiskLevel] = useState<RiskLevel | "">("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -43,7 +57,7 @@ export default function KidneyPredictionForm() {
     }
   };
 
-  const calculateRisk = () => {
+  const calculateRisk = (): string => {
     const sg = parseFloat(form.specificGravity);
     const alb = parseInt(form.albumin);
     const hgb = parseFloat(form.hemoglobin);
@@ -64,9 +78,8 @@ export default function KidneyPredictionForm() {
       edema === "yes"
     ) {
       return "High risk of Kidney Disease detected.";
-    } else {
-      return "Low risk or no Kidney Disease.";
     }
+    return "Low risk or no Kidney Disease.";
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -86,7 +99,7 @@ export default function KidneyPredictionForm() {
     }, 2000);
   };
 
-  const dietCharts = {
+  const dietCharts: DietCharts = {
     low: "/good-kidney-health.pdf",
     high: "/high-risk-kidney-diet.pdf",
   };
@@ -288,7 +301,22 @@ export default function KidneyPredictionForm() {
   );
 }
 
-// Reusable InputField component
+interface InputFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: React.HTMLInputTypeAttribute;
+  error?: string;
+  step?: string;
+  min?: string | number;
+  max?: string | number;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  className?: string;
+}
+
 function InputField({
   label,
   name,
@@ -296,16 +324,14 @@ function InputField({
   onChange,
   type = "text",
   error = "",
-  ...props
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: string;
-  error?: string;
-  [key: string]: any;
-}) {
+  step,
+  min,
+  max,
+  placeholder,
+  required = false,
+  disabled = false,
+  className = "",
+}: InputFieldProps) {
   return (
     <div className="flex flex-col">
       <label htmlFor={name} className="mb-1 font-medium text-gray-700">
@@ -317,17 +343,30 @@ function InputField({
         name={name}
         value={value}
         onChange={onChange}
+        step={step}
+        min={min}
+        max={max}
+        placeholder={placeholder}
+        required={required}
+        disabled={disabled}
         className={`px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
           error ? "border-red-500 focus:ring-red-200" : "focus:ring-blue-400"
-        }`}
-        {...props}
+        } ${className}`}
       />
       {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </div>
   );
 }
 
-// Reusable SelectField component
+interface SelectFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: string[];
+  error?: string;
+}
+
 function SelectField({
   label,
   name,
@@ -335,14 +374,7 @@ function SelectField({
   onChange,
   options,
   error = "",
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  options: string[];
-  error?: string;
-}) {
+}: SelectFieldProps) {
   return (
     <div className="flex flex-col">
       <label htmlFor={name} className="mb-1 font-medium text-gray-700">
