@@ -4,48 +4,66 @@ import Link from "next/link";
 
 export default function KidneyPredictionForm() {
   const [form, setForm] = useState({
-    bloodPressure: "",
     specificGravity: "",
     albumin: "",
-    sugar: "",
-    bloodGlucose: "",
-    bloodUrea: "",
-    serumCreatinine: "",
-    sodium: "",
-    potassium: "",
     hemoglobin: "",
-    packedCellVolume: "",
-    whiteBloodCellCount: "",
     redBloodCellCount: "",
     hypertension: "",
     diabetesMellitus: "",
-    coronaryArteryDisease: "",
     appetite: "",
     pedalEdema: "",
-    anemia: "",
   });
 
   const [result, setResult] = useState("");
-  const [riskLevel, setRiskLevel] = useState<"low" | "moderate" | "high" | "">(
-    ""
-  );
+  const [riskLevel, setRiskLevel] = useState<"low" | "high" | "">("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.specificGravity) newErrors.specificGravity = "Required";
+    if (!form.albumin) newErrors.albumin = "Required";
+    if (!form.hemoglobin) newErrors.hemoglobin = "Required";
+    if (!form.redBloodCellCount) newErrors.redBloodCellCount = "Required";
+    if (!form.hypertension) newErrors.hypertension = "Required";
+    if (!form.diabetesMellitus) newErrors.diabetesMellitus = "Required";
+    if (!form.appetite) newErrors.appetite = "Required";
+    if (!form.pedalEdema) newErrors.pedalEdema = "Required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
+    }
   };
 
   const calculateRisk = () => {
-    const bp = Number(form.bloodPressure);
-    const glucose = Number(form.bloodGlucose);
-    const creatinine = Number(form.serumCreatinine);
-    const anemia = form.anemia.toLowerCase();
+    const sg = parseFloat(form.specificGravity);
+    const alb = parseInt(form.albumin);
+    const hgb = parseFloat(form.hemoglobin);
+    const rbc = parseFloat(form.redBloodCellCount);
+    const hyper = form.hypertension.toLowerCase();
+    const diabetes = form.diabetesMellitus.toLowerCase();
+    const appetite = form.appetite.toLowerCase();
+    const edema = form.pedalEdema.toLowerCase();
 
-    if (bp > 140 || glucose > 140 || creatinine > 1.3 || anemia === "yes") {
+    if (
+      sg < 1.01 ||
+      alb > 2 ||
+      hgb < 11 ||
+      rbc < 4 ||
+      hyper === "yes" ||
+      diabetes === "yes" ||
+      appetite === "poor" ||
+      edema === "yes"
+    ) {
       return "High risk of Kidney Disease detected.";
-    } else if (bp > 120 || glucose > 120 || creatinine > 1.1) {
-      return "Moderate risk of Kidney Disease.";
     } else {
       return "Low risk or no Kidney Disease.";
     }
@@ -53,17 +71,23 @@ export default function KidneyPredictionForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const risk = calculateRisk();
-    setResult(risk);
 
-    if (risk.includes("High")) setRiskLevel("high");
-    else if (risk.includes("Moderate")) setRiskLevel("moderate");
-    else setRiskLevel("low");
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    setResult("");
+    setRiskLevel("");
+
+    setTimeout(() => {
+      const risk = calculateRisk();
+      setResult(risk);
+      setRiskLevel(risk.includes("High") ? "high" : "low");
+      setIsLoading(false);
+    }, 2000);
   };
 
   const dietCharts = {
     low: "/good-kidney-health.pdf",
-    moderate: "/moderate-risk-kidney-diet.pdf",
     high: "/high-risk-kidney-diet.pdf",
   };
 
@@ -78,149 +102,183 @@ export default function KidneyPredictionForm() {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InputField
-            label="Blood Pressure (mm Hg) *"
-            name="bloodPressure"
-            value={form.bloodPressure}
-            onChange={handleChange}
-            required
-            type="number"
-          />
-          <InputField
-            label="Specific Gravity"
+            label="Specific Gravity *"
             name="specificGravity"
             value={form.specificGravity}
             onChange={handleChange}
             type="number"
+            step="0.001"
+            min="1.000"
+            max="1.050"
+            error={errors.specificGravity}
           />
           <InputField
-            label="Albumin"
+            label="Albumin (0-5) *"
             name="albumin"
             value={form.albumin}
             onChange={handleChange}
             type="number"
+            min="0"
+            max="5"
+            error={errors.albumin}
           />
           <InputField
-            label="Sugar"
-            name="sugar"
-            value={form.sugar}
-            onChange={handleChange}
-            type="number"
-          />
-          <InputField
-            label="Blood Glucose Random (mg/dL) *"
-            name="bloodGlucose"
-            value={form.bloodGlucose}
-            onChange={handleChange}
-            required
-            type="number"
-          />
-          <InputField
-            label="Blood Urea (mg/dL)"
-            name="bloodUrea"
-            value={form.bloodUrea}
-            onChange={handleChange}
-            type="number"
-          />
-          <InputField
-            label="Serum Creatinine (mg/dL) *"
-            name="serumCreatinine"
-            value={form.serumCreatinine}
-            onChange={handleChange}
-            required
-            type="number"
-          />
-          <InputField
-            label="Sodium (mEq/L)"
-            name="sodium"
-            value={form.sodium}
-            onChange={handleChange}
-            type="number"
-          />
-          <InputField
-            label="Potassium (mEq/L)"
-            name="potassium"
-            value={form.potassium}
-            onChange={handleChange}
-            type="number"
-          />
-          <InputField
-            label="Hemoglobin (g/dL)"
+            label="Hemoglobin (g/dL) *"
             name="hemoglobin"
             value={form.hemoglobin}
             onChange={handleChange}
             type="number"
+            step="0.1"
+            min="0"
+            error={errors.hemoglobin}
           />
           <InputField
-            label="Anemia (Yes/No) *"
-            name="anemia"
-            value={form.anemia}
+            label="Red Blood Cell Count (millions/cmm) *"
+            name="redBloodCellCount"
+            value={form.redBloodCellCount}
             onChange={handleChange}
-            required
-            type="text"
-            placeholder="Yes or No"
+            type="number"
+            step="0.1"
+            min="0"
+            error={errors.redBloodCellCount}
+          />
+          <SelectField
+            label="Hypertension *"
+            name="hypertension"
+            value={form.hypertension}
+            onChange={handleChange}
+            options={["", "Yes", "No"]}
+            error={errors.hypertension}
+          />
+          <SelectField
+            label="Diabetes Mellitus *"
+            name="diabetesMellitus"
+            value={form.diabetesMellitus}
+            onChange={handleChange}
+            options={["", "Yes", "No"]}
+            error={errors.diabetesMellitus}
+          />
+          <SelectField
+            label="Appetite *"
+            name="appetite"
+            value={form.appetite}
+            onChange={handleChange}
+            options={["", "Normal", "Poor"]}
+            error={errors.appetite}
+          />
+          <SelectField
+            label="Pedal Edema *"
+            name="pedalEdema"
+            value={form.pedalEdema}
+            onChange={handleChange}
+            options={["", "Yes", "No"]}
+            error={errors.pedalEdema}
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+          disabled={isLoading}
+          className={`w-full py-3 rounded transition flex items-center justify-center ${
+            isLoading
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
         >
-          Predict Kidney Disease Risk
+          {isLoading ? (
+            <>
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Processing...
+            </>
+          ) : (
+            "Predict Kidney Disease Risk"
+          )}
         </button>
       </form>
 
-      {result && (
+      {isLoading && (
+        <div className="mt-8 p-6 rounded-lg max-w-3xl w-full bg-white text-center">
+          <div className="flex flex-col items-center">
+            <svg
+              className="animate-spin h-10 w-10 text-blue-600 mb-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <p className="text-lg font-medium text-gray-700">
+              Analyzing your kidney health data...
+            </p>
+          </div>
+        </div>
+      )}
+
+      {result && riskLevel && !isLoading && (
         <div
           className={`mt-8 p-6 rounded-lg max-w-3xl w-full text-center font-semibold ${
             riskLevel === "high"
               ? "bg-red-100 text-red-700"
-              : riskLevel === "moderate"
-              ? "bg-yellow-100 text-yellow-800"
               : "bg-green-100 text-green-700"
           }`}
         >
           <p className="text-xl">{result}</p>
 
-          {riskLevel === "low" && (
-            <Link
-              href={dietCharts.low}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-4 px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            >
-              Healthy Kidney Diet Chart
-            </Link>
-          )}
-
-          {riskLevel === "moderate" && (
-            <Link
-              href={dietCharts.moderate}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-4 px-6 py-3 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition"
-            >
-              Moderate Risk Kidney Diet Chart
-            </Link>
-          )}
+          <Link
+            href={dietCharts[riskLevel]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-block mt-4 px-6 py-3 ${
+              riskLevel === "low"
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-red-600 hover:bg-red-700"
+            } text-white rounded transition`}
+          >
+            {riskLevel === "low"
+              ? "Healthy Kidney Diet Chart"
+              : "Kidney Disease Control Diet Chart"}
+          </Link>
 
           {riskLevel === "high" && (
             <>
-              <Link
-                href={dietCharts.high}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-4 px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition"
-              >
-                Kidney Disease Control Diet Chart
-              </Link>
               <p className="mt-4 font-semibold text-red-800">
-                We strongly recommend consulting a healthcare professional for
-                further evaluation.
+                Please consult a doctor immediately.
               </p>
               <Link
-                href="/"
+                href="/#contact"
                 className="mt-2 inline-block text-blue-700 underline"
               >
-                Consult to Doctor or Specialist
+                Contact a Specialist
               </Link>
             </>
           )}
@@ -236,17 +294,17 @@ function InputField({
   name,
   value,
   onChange,
-  required = false,
   type = "text",
-  placeholder = "",
+  error = "",
+  ...props
 }: {
   label: string;
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  required?: boolean;
   type?: string;
-  placeholder?: string;
+  error?: string;
+  [key: string]: any;
 }) {
   return (
     <div className="flex flex-col">
@@ -259,10 +317,53 @@ function InputField({
         name={name}
         value={value}
         onChange={onChange}
-        required={required}
-        placeholder={placeholder}
-        className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className={`px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
+          error ? "border-red-500 focus:ring-red-200" : "focus:ring-blue-400"
+        }`}
+        {...props}
       />
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+    </div>
+  );
+}
+
+// Reusable SelectField component
+function SelectField({
+  label,
+  name,
+  value,
+  onChange,
+  options,
+  error = "",
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: string[];
+  error?: string;
+}) {
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={name} className="mb-1 font-medium text-gray-700">
+        {label}
+      </label>
+      <select
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+        className={`px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
+          error ? "border-red-500 focus:ring-red-200" : "focus:ring-blue-400"
+        }`}
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option || "-- Select --"}
+          </option>
+        ))}
+      </select>
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </div>
   );
 }

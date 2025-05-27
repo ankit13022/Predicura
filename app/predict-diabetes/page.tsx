@@ -1,24 +1,35 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
+type FormData = {
+  pregnancies: string;
+  glucose: string;
+  bloodPressure: string;
+  skinThickness: string;
+  insulin: string;
+  bmi: string;
+  age: string;
+};
+
 export default function DiabetesPredictionForm() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormData>({
     pregnancies: "",
     glucose: "",
     bloodPressure: "",
     skinThickness: "",
     insulin: "",
     bmi: "",
-    dpf: "",
     age: "",
   });
 
   const [result, setResult] = useState<string | null>(null);
-  const [riskLevel, setRiskLevel] = useState<"low" | "high" | "">("");
+  const [riskLevel, setRiskLevel] = useState<"low" | "high" | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -31,13 +42,21 @@ export default function DiabetesPredictionForm() {
       return;
     }
 
-    const score =
-      parseFloat(glucose) * 0.5 + parseFloat(bmi) * 1.2 + parseFloat(age) * 0.3;
+    setIsLoading(true);
 
-    const prediction = score > 100 ? "High Risk of Diabetes" : "Low Risk";
+    // Simulate processing delay
+    setTimeout(() => {
+      const score =
+        parseFloat(glucose) * 0.5 +
+        parseFloat(bmi) * 1.2 +
+        parseFloat(age) * 0.3;
 
-    setResult(prediction);
-    setRiskLevel(prediction === "High Risk of Diabetes" ? "high" : "low");
+      const prediction = score > 100 ? "High Risk of Diabetes" : "Low Risk";
+
+      setResult(prediction);
+      setRiskLevel(prediction === "High Risk of Diabetes" ? "high" : "low");
+      setIsLoading(false);
+    }, 2000);
   };
 
   const dietCharts = {
@@ -62,7 +81,6 @@ export default function DiabetesPredictionForm() {
           { label: "Skin Thickness", name: "skinThickness" },
           { label: "Insulin Level", name: "insulin" },
           { label: "BMI (Body Mass Index) *", name: "bmi" },
-          { label: "Diabetes Pedigree Function", name: "dpf" },
           { label: "Age *", name: "age" },
         ].map(({ label, name }) => (
           <div key={name} className="flex flex-col">
@@ -77,7 +95,7 @@ export default function DiabetesPredictionForm() {
               name={name}
               id={name}
               placeholder={`Enter ${label}`}
-              value={form[name as keyof typeof form]}
+              value={form[name as keyof FormData]}
               onChange={handleChange}
               className="px-5 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-300 text-lg"
             />
@@ -86,13 +104,74 @@ export default function DiabetesPredictionForm() {
 
         <button
           type="submit"
-          className="w-full py-4 bg-blue-600 text-white text-xl font-semibold rounded-lg hover:bg-blue-700 shadow-md transition duration-300"
+          disabled={isLoading}
+          className={`w-full py-4 text-white text-xl font-semibold rounded-lg shadow-md transition duration-300 ${
+            isLoading
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
-          Submit
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Processing...
+            </div>
+          ) : (
+            "Submit"
+          )}
         </button>
       </form>
 
-      {result && (
+      {isLoading && (
+        <div className="mt-10 w-full max-w-xl p-8 bg-white rounded-xl shadow-lg border border-gray-200 text-center">
+          <div className="flex flex-col items-center">
+            <svg
+              className="animate-spin h-12 w-12 text-blue-600"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <p className="mt-4 text-lg font-semibold text-gray-700">
+              Analyzing your health data...
+            </p>
+          </div>
+        </div>
+      )}
+
+      {result && riskLevel && !isLoading && (
         <div
           className={`mt-10 w-full max-w-xl p-6 rounded-xl shadow-lg text-center text-xl font-semibold ${
             riskLevel === "high"
@@ -102,27 +181,23 @@ export default function DiabetesPredictionForm() {
         >
           <p>Prediction Result: {result}</p>
 
-          {riskLevel === "low" && (
-            <Link
-              href={dietCharts.low}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-6 px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow transition duration-300"
-            >
-              Download Healthy Diabetes Diet Chart
-            </Link>
-          )}
+          <Link
+            href={dietCharts[riskLevel]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-block mt-6 px-8 py-3 ${
+              riskLevel === "high" ? "bg-red-600" : "bg-green-600"
+            } text-white rounded-lg hover:${
+              riskLevel === "high" ? "bg-red-700" : "bg-green-700"
+            } shadow transition duration-300`}
+          >
+            Download{" "}
+            {riskLevel === "high" ? "Diabetes Control" : "Healthy Diabetes"}{" "}
+            Diet Chart
+          </Link>
 
           {riskLevel === "high" && (
             <>
-              <Link
-                href={dietCharts.high}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-6 px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow transition duration-300"
-              >
-                Download Diabetes Control Diet Chart
-              </Link>
               <p className="mt-6 font-semibold text-red-900">
                 We strongly recommend consulting a healthcare professional for
                 further evaluation.
